@@ -11,10 +11,10 @@ Distributed system like Cassandra uses bloom filter to avoid checking data on SS
 
 Hbase uses bloom filter to check whether a line or data information is present inside a file or not - https://hbase.apache.org/2.2/devapidocs/org/apache/hadoop/hbase/util/BloomFilter.html
 
-<b> In Cache: </b> </br>
+<b> In Cache: </b> </br></br>
 Redis use bloom filter and it's capability to implemented probabilistic data structure called RedisBloom. - https://redis.io/docs/stack/bloom/
 
-<b> In Spell check: </b> <br/>
+<b> In Spell check: </b> <br/></br>
 A full compiled bloom filter can be used to check existence of word. 
 
 # Implementation using c# .NET 

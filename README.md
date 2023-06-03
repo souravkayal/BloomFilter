@@ -10,11 +10,12 @@ In distributed system :
 Distributed system like Cassandra uses bloom filter to avoid checking data on SSTable for a partition being requested. The detail can be read here - https://cassandra.apache.org/doc/latest/cassandra/operating/bloom_filters.html
 
 Hbase uses bloom filter to check whether a line or data information is present inside a file or not - https://hbase.apache.org/2.2/devapidocs/org/apache/hadoop/hbase/util/BloomFilter.html
-
-In Cache:
+<br>
+<b> In Cache: </b>
 Redis use bloom filter and it's capability to implemented probabilistic data structure called RedisBloom. - https://redis.io/docs/stack/bloom/
 
-In Spell check:
+<br>
+<b> In Spell check: </b> 
 A full compiled bloom filter can be used to check existence of word. 
 
 # Implementation using c# .NET 
@@ -36,25 +37,31 @@ bool Contains(string item)
 
 ```cs
 
- public static void Main(String[]args)
+    public static void Main(String[]args)
     {
 
-        int filterSize = 1000;
-        int hashTines = 5;
+        // Create a Bloom filter with an expected item count of 1000 and false positive rate of 0.01
+        BloomFilter bloomFilter = new BloomFilter(1000, 0.01);
 
-        BloomFilter filter = new BloomFilter(filterSize, hashTines);
+        // Add an item to the filter
+        bloomFilter.Add("item1"); 
+        bloomFilter.Add("item2");
 
-        // Adding items to the filter
-        filter.Add("apple");
-        filter.Add("banana");
-        filter.Add("orange");
-
-        // Checking membership
-        Console.WriteLine(filter.Contains("apple"));    // true
-        Console.WriteLine(filter.Contains("grape"));    // false
-        Console.WriteLine(filter.Contains("banana"));   // true
+        // Check if an item exists in the filter
+        bool item1Exists = bloomFilter.Contains("item1"); 
+        bool item3Exists = bloomFilter.Contains("item3");
+        
+        Console.WriteLine("Item 1 exists: " + item1Exists);
+        Console.WriteLine("Item 3 exists: " + item3Exists);
 
         Console.ReadLine();
     }
 ```  
-  
+<br> <b> Inject hashing algoritam while creating object of bloom filter </b>
+ 
+```cs
+  BloomFilter bloomFilterWithSHA = new BloomFilter(1000, 0.01, new HSHA1());
+```
+ 
+ 
+ 

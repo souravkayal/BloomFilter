@@ -8,3 +8,5 @@
 /src/bin/Debug/net6.0
 /src/.vs
 /src/obj
+/Bloom.Unit/obj
+/Bloom.Unit/bin/Debug/net6.0

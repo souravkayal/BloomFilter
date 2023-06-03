@@ -21,6 +21,7 @@ A full compiled bloom filter can be used to check existence of word.
 
 <b> Adding value to bloom filter: </b> <br><br>
 Add() method is implemented to insert value in bloom filter. The algorithm will generate hash of input value by using SHA1 hashing algorithm and set specific bit in filter.  
+</br>
 Time Complexciy : O(n) </br>
 Space Complexcity O(1)
 

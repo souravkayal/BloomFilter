@@ -119,6 +119,7 @@ public class Program
         Console.WriteLine("Item 1 exists: " + item1Exists);
         Console.WriteLine("Item 3 exists: " + item3Exists);
 
+        BloomFilter bloomFilterWithSHA = new BloomFilter(1000, 0.01, new HSHA1());
 
         Console.ReadLine();
     }

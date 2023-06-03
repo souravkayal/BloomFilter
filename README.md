@@ -18,7 +18,6 @@ In Spell check:
 A full compiled bloom filter can be used to check existence of word. 
 
 # Implementation using c# .NET 
-It's very simple form of bloom filter using c#. 
 
 <b> Adding value to bloom filter: </b>  <br><br>
 Add() method is implemented to insert value in bloom filter. The algorithm will generate hash of input value by using SHA1 hashing algorithm and set specific bit in filter.  
@@ -32,3 +31,30 @@ Need to call Contains (string item) method to check existence of value against w
 ```cs
 bool Contains(string item)
 ```
+
+<b> Add and check presence of value in bloom filter </b> <br> <br>
+
+```cs
+
+ public static void Main(String[]args)
+    {
+
+        int filterSize = 1000;
+        int hashTines = 5;
+
+        BloomFilter filter = new BloomFilter(filterSize, hashTines);
+
+        // Adding items to the filter
+        filter.Add("apple");
+        filter.Add("banana");
+        filter.Add("orange");
+
+        // Checking membership
+        Console.WriteLine(filter.Contains("apple"));    // true
+        Console.WriteLine(filter.Contains("grape"));    // false
+        Console.WriteLine(filter.Contains("banana"));   // true
+
+        Console.ReadLine();
+    }
+```  
+  

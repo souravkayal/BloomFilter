@@ -1,6 +1,6 @@
 ﻿
+using Bloom.HashPlugin;
 using System.Collections;
-using System.Security.Cryptography;
 using System.Text;
 
 /// <summary>
@@ -8,43 +8,52 @@ using System.Text;
 /// </summary>
 public class BloomFilter
 {
-    private BitArray bitArray;
-    private int size;
-    private int numHashFunctions;
+    private BitArray _filter;
+    private int _numHashFunctions;
+    private int _filterSize;
+    private IHash _hash;
 
     /// <summary>
-    /// Default constructor with static value
+    /// Constructor to take size of filter and number of hashing to be applied
     /// </summary>
-    public BloomFilter()
+    /// <param name="expectedItemsCount"> Expected size of the bloom filter. </param>
+    /// <param name="falsePositiveRate">Tollerance of false positive rate. </param>
+    public BloomFilter(int expectedItemsCount, double falsePositiveRate)
     {
-        this.size = 1000;
-        this.bitArray = new BitArray(size);
-        this.numHashFunctions = 5;
+        var optimalValues = GetOptimalFilterSizeAndHashes(expectedItemsCount, falsePositiveRate);
+        _filterSize = optimalValues.Item1;
+        _numHashFunctions = optimalValues.Item2;
+        _hash = new Bloom.HashPlugin.HMD5();
+        _filter = new BitArray(_filterSize);
     }
 
     /// <summary>
     /// Constructor to take size of filter and number of hashing to be applied
     /// </summary>
-    /// <param name="size">Size of the bloom filter</param>
-    /// <param name="hashFunctionNumber">Number of hashing times</param>
-    public BloomFilter(int size, int hashFunctionNumber)
+    /// <param name="expectedItemsCount"> Expected size of the bloom filter. </param>
+    /// <param name="falsePositiveRate">Tollerance of false positive rate. </param>
+    public BloomFilter(int expectedItemsCount, double falsePositiveRate , IHash hash)
     {
-        this.size = size;
-        this.bitArray = new BitArray(size);
-        this.numHashFunctions = hashFunctionNumber;
+        var optimalValues = GetOptimalFilterSizeAndHashes(expectedItemsCount, falsePositiveRate);
+        _filterSize = optimalValues.Item1;
+        _numHashFunctions = optimalValues.Item2;
+        _hash = hash;
+        _filter = new BitArray(_filterSize);
     }
+
 
     /// <summary>
     /// Add items to bloom filter
     /// </summary>
-    /// <param name="item">Item to be pushed in bloom filter</param>
+    /// <param name="item">Item to be set in bloom filter </param>
     public void Add(string item)
     {
-        byte[] itemBytes = System.Text.Encoding.UTF8.GetBytes(item);
-        for (int i = 0; i < numHashFunctions; i++)
+        byte[] itemBytes = Encoding.UTF8.GetBytes(item);
+
+        for (int i = 0; i < _numHashFunctions; i++)
         {
-            int hash = ComputeHash(itemBytes, i);
-            bitArray[hash] = true;
+            int hash = GetHash(itemBytes, i);
+            _filter[hash] = true;
         }
     }
 
@@ -56,10 +65,11 @@ public class BloomFilter
     public bool Contains(string item)
     {
         byte[] itemBytes = Encoding.UTF8.GetBytes(item);
-        for (int i = 0; i < numHashFunctions; i++)
+
+        for (int i = 0; i < _numHashFunctions; i++)
         {
-            int hash = ComputeHash(itemBytes, i);
-            if (!bitArray[hash])
+            int hash = GetHash(itemBytes, i);
+            if (!_filter[hash])
                 return false;
         }
         return true;
@@ -68,41 +78,47 @@ public class BloomFilter
     /// <summary>
     /// Compute hash of the item which need to check against bloom filter
     /// </summary>
-    /// <param name="itemBytes"></param>
-    /// <param name="hashIndex"></param>
+    /// <param name="itemBytes">item which need to be hashed</param>
+    /// <param name="hashIndex">Index of hash time's </param>
     /// <returns></returns>
-    private int ComputeHash(byte[] itemBytes, int hashIndex)
+    private int GetHash(byte[] itemBytes, int hashIndex)
     {
-        using (var sha1 = SHA1.Create())
-        {
-            byte[] hashBytes = sha1.ComputeHash(itemBytes);
-            int hash = BitConverter.ToInt32(hashBytes, 0);
-            return Math.Abs(hash + hashIndex) % size;
-        }
+        return BitConverter.ToInt32( _hash.ComputeHash(itemBytes), 0) ^ hashIndex;
     }
 
-}
+    /// <summary>
+    /// Function to generate optimal filter size and times of hashing by expected item count and expected false positive rate 
+    /// </summary>
+    /// <param name="expectedItemsCount">Number of items are expected to be keep in bloom filter </param>
+    /// <param name="falsePositiveRate">Rate of false positive </param>
+    /// <returns></returns>
+    private (int, int) GetOptimalFilterSizeAndHashes(int expectedItemsCount, double falsePositiveRate)
+    {
+        int filterSize = (int)Math.Ceiling(-(expectedItemsCount * Math.Log(falsePositiveRate)) / Math.Pow(Math.Log(2), 2));
+        int numHashFunctions = (int)Math.Ceiling((filterSize / expectedItemsCount) * Math.Log(2));
 
+        return (filterSize, numHashFunctions );
+    }
+}
 
 public class Program
 {
     public static void Main(String[]args)
     {
+        // Create a Bloom filter with an expected item count of 1000 and false positive rate of 0.01
+        BloomFilter bloomFilter = new BloomFilter(1000, 0.01);
 
-        int filterSize = 1000;
-        int hashTines = 5;
+        // Add an item to the filter
+        bloomFilter.Add("item1"); 
+        bloomFilter.Add("item2");
 
-        BloomFilter filter = new BloomFilter(filterSize, hashTines);
+        // Check if an item exists in the filter
+        bool item1Exists = bloomFilter.Contains("item1"); 
+        bool item3Exists = bloomFilter.Contains("item3");
+        
+        Console.WriteLine("Item 1 exists: " + item1Exists);
+        Console.WriteLine("Item 3 exists: " + item3Exists);
 
-        // Adding items to the filter
-        filter.Add("apple");
-        filter.Add("banana");
-        filter.Add("orange");
-
-        // Checking membership
-        Console.WriteLine(filter.Contains("apple"));    // true
-        Console.WriteLine(filter.Contains("grape"));    // false
-        Console.WriteLine(filter.Contains("banana"));   // true
 
         Console.ReadLine();
     }

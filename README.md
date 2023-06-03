@@ -5,17 +5,16 @@ I.e It can indicate that the value is present where it is not actually present b
 
 # A Few real systems which use bloom filter.
 
-In distributed system :
+<b> In distributed system : </b>
 
 Distributed system like Cassandra uses bloom filter to avoid checking data on SSTable for a partition being requested. The detail can be read here - https://cassandra.apache.org/doc/latest/cassandra/operating/bloom_filters.html
 
 Hbase uses bloom filter to check whether a line or data information is present inside a file or not - https://hbase.apache.org/2.2/devapidocs/org/apache/hadoop/hbase/util/BloomFilter.html
-<br>
-<b> In Cache: </b>
+
+<br/> <b> In Cache: </b>
 Redis use bloom filter and it's capability to implemented probabilistic data structure called RedisBloom. - https://redis.io/docs/stack/bloom/
 
-<br>
-<b> In Spell check: </b> 
+<br/><b> In Spell check: </b> 
 A full compiled bloom filter can be used to check existence of word. 
 
 # Implementation using c# .NET 

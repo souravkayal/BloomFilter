@@ -20,13 +20,13 @@ A full compiled bloom filter can be used to check existence of word.
 # Implementation using c# .NET 
 It's very simple form of bloom filter using c#. 
 
-Adding value to bloom filter:  <br>
+Adding value to bloom filter:  <br><br>
 Add() method is implemented to insert value in bloom filter. The algorithm will generate hash of input value by using SHA1 hashing algorithm and set specific bit in filter.  
 
 ```cs
 void Add(string item)
 ```
-Check existence of value in filter: <br>
+Check existence of value in filter: <br><br>
 Need to call Contains (string item) method to check existence of value against with filter. It will return true if there is chance to presence otherwise false.
 
 ```cs

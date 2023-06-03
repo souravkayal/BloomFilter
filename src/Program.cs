@@ -83,7 +83,7 @@ public class BloomFilter
     /// <returns></returns>
     private int GetHash(byte[] itemBytes, int hashIndex)
     {
-        return BitConverter.ToInt32( _hash.ComputeHash(itemBytes), 0) ^ hashIndex;
+        return Math.Abs((BitConverter.ToInt32(_hash.ComputeHash(itemBytes), 0) ^ hashIndex)  % _filterSize);
     }
 
     /// <summary>

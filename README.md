@@ -1,5 +1,5 @@
 <br/>
-![image](https://github.com/souravkayal/BloomFilter/assets/6651731/e4b27a8a-6e49-4580-959a-2461f136ed4d)
+![image](https://github.com/souravkayal/BloomFilter/assets/6651731/40c3521b-9556-4d06-9339-dcf2fdc36151)
 
 <br/>
 

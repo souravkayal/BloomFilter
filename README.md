@@ -1,5 +1,6 @@
 <br/>
-![image](https://github.com/souravkayal/BloomFilter/assets/6651731/40c3521b-9556-4d06-9339-dcf2fdc36151)
+
+<img src='https://github.com/souravkayal/BloomFilter/assets/6651731/40c3521b-9556-4d06-9339-dcf2fdc36151'/>
 
 <br/>
 

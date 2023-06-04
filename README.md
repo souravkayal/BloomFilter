@@ -1,3 +1,8 @@
+<br/>
+![image](https://github.com/souravkayal/BloomFilter/assets/6651731/e4b27a8a-6e49-4580-959a-2461f136ed4d)
+
+<br/>
+
 # BloomFilter
 
 Bollm filter is space efficient probablistic data structure which is invented in 1970 by Burton Howard Bloom. It comes with risk of false positive result but not false negative. 
